@@ -12,4 +12,9 @@ export class Usuario {
         this.senha = user?.senha ?? '';
         this.id = user?.id ?? 0;
     }
+
+    atualizar(nome: string, chavePix: string){
+        this.nome = nome;
+        this.chavePix = chavePix;
+    }
 }

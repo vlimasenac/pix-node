@@ -1,4 +1,5 @@
 import { Usuario } from "src/entidades/usuario.entidade";
+import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.requet";
 
 export class UsuarioServico {
@@ -46,6 +47,18 @@ export class UsuarioServico {
         return usuario;
     }
 
+    public atualizarUsuario(id: number, request: AtualizarUsuarioRequest): boolean {
+        var usuario = this.getUsuarioPorId(id);
+
+        if(usuario == undefined) return false;
+
+        usuario.atualizar(request.nome, request.chavePix);
+
+        this.salvarUsuario(usuario);
+
+        return true;
+    }
+
     private checarNomeUsuarioContemTexto(user: Usuario, nome: string): boolean {
         var userNomeNormalizado = user.nome.toLowerCase();
         var nomeBuscaNormalizado = nome.toLowerCase();
@@ -60,5 +73,11 @@ export class UsuarioServico {
         var emailBuscaNormalizado = email.toLowerCase();
 
         return userEmailNormalizado == emailBuscaNormalizado;
+    }
+
+    private salvarUsuario(user: Usuario){
+        var usuarioIndex = this.usuariosEmMemoria.indexOf(user);
+
+        this.usuariosEmMemoria[usuarioIndex] = user;
     }
 }

@@ -1,6 +1,7 @@
-import { Controller, Get, HttpStatus, Param, Query, Res, Body, Post } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Param, Query, Res, Body, Post, Put } from "@nestjs/common";
 import { Response } from "express";
 import { Usuario } from "src/entidades/usuario.entidade";
+import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.requet";
 import { UsuarioServico } from "src/servicos/usuario.servico";
 
@@ -58,12 +59,21 @@ export class UsuarioController {
             }
             else{
                 res.status(HttpStatus.BAD_REQUEST);
-            } //ola pedro
+            }
         }
         catch (exception) {
             res.status(HttpStatus.CONFLICT).json(exception);
         }
 
         res.send();
+    }
+
+    @Put('atualizarUsuario/:id')
+    public atualizarUsuario(@Param('id') id: number, @Body() request: AtualizarUsuarioRequest, @Res() res: Response) {
+        var sucesso = this.usuarioServico.atualizarUsuario(id, request);
+
+        var status = sucesso == true ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        res.status(status).send();
     }
 }
