@@ -58,7 +58,7 @@ export class UsuarioController {
             }
             else{
                 res.status(HttpStatus.BAD_REQUEST);
-            }
+            } //ola pedro
         }
         catch (exception) {
             res.status(HttpStatus.CONFLICT).json(exception);
