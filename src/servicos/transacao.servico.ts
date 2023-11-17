@@ -1,5 +1,7 @@
+import { Injectable } from "@nestjs/common";
 import { Transacao } from "src/entidades/transacao.entidade";
 
+@Injectable()
 export class TransacaoServico {
 
     getTransacao(): Transacao[] {

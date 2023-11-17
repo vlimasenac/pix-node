@@ -1,5 +1,7 @@
+import { Injectable } from "@nestjs/common";
 import { Conta } from "src/entidades/conta.entidade";
 
+@Injectable()
 export class ContaRepositorio {
     
     private contasEmMemoria: Conta[] = [];

@@ -1,6 +1,7 @@
 import { Usuario } from "src/entidades/usuario.entidade";
 import { Injectable } from '@nestjs/common';
 
+@Injectable()
 export class UsuarioRepositorio {
 
     private usuariosEmMemoria: Usuario[] = [];
@@ -11,7 +12,7 @@ export class UsuarioRepositorio {
 
     public salvarUsuario(user: Usuario){
         var usuarioIndex = this.usuariosEmMemoria.indexOf(user);
-        console.log(usuarioIndex)
+
         if(usuarioIndex >= 0){
             this.usuariosEmMemoria[usuarioIndex] = user;
         }
@@ -20,7 +21,6 @@ export class UsuarioRepositorio {
             this.usuariosEmMemoria.push(user);
         }
 
-        console.log(this.usuariosEmMemoria)
     }
 
     getUsuarioPorId(id: number): Usuario | undefined {

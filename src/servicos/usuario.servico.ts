@@ -1,8 +1,10 @@
+import { Injectable } from "@nestjs/common";
 import { Usuario } from "src/entidades/usuario.entidade";
 import { UsuarioRepositorio } from "src/repositorios/usuario.repositorio";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.requet";
 
+@Injectable()
 export class UsuarioServico {
 
     constructor(private usuarioRepositorio: UsuarioRepositorio){
@@ -41,7 +43,6 @@ export class UsuarioServico {
             nome: request.nome,
             senha: request.senha
         });
-        console.log(usuario);
 
         this.usuarioRepositorio.salvarUsuario(usuario);
 

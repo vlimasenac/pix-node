@@ -1,8 +1,10 @@
+import { Injectable } from "@nestjs/common";
 import { Conta } from "src/entidades/conta.entidade";
 import { ContaRepositorio } from "src/repositorios/conta.repositorio";
 import { UsuarioRepositorio } from "src/repositorios/usuario.repositorio";
 import { CriarContaRequest } from "src/requests/criar-conta.request";
 
+@Injectable()
 export class ContaServico {  
 
     constructor(private usuarioRepositorio: UsuarioRepositorio,

@@ -53,7 +53,7 @@ export class UsuarioController {
     public incluirUsuario(@Body() user: CriarUsuarioRequest, @Res() res: Response) {
         try{
             var usuarioCriado = this.usuarioServico.incluirUsuario(user);
-            console.log(usuarioCriado)
+
             if(usuarioCriado != undefined){
                 res.status(HttpStatus.CREATED).json(usuarioCriado);
             }
@@ -62,7 +62,7 @@ export class UsuarioController {
             }
         }
         catch (exception) {
-            console.log(exception)
+
             res.status(HttpStatus.CONFLICT).json(exception);
         }
 
