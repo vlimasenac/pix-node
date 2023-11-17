@@ -1,4 +1,4 @@
-import { Controller, Get, HttpStatus, Param, Query, Res, Body, Post, Put } from "@nestjs/common";
+import { Controller, Get, HttpStatus, Param, Query, Res, Body, Post, Put, Delete } from "@nestjs/common";
 import { Response } from "express";
 import { Usuario } from "src/entidades/usuario.entidade";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
@@ -53,7 +53,7 @@ export class UsuarioController {
     public incluirUsuario(@Body() user: CriarUsuarioRequest, @Res() res: Response) {
         try{
             var usuarioCriado = this.usuarioServico.incluirUsuario(user);
-
+            console.log(usuarioCriado)
             if(usuarioCriado != undefined){
                 res.status(HttpStatus.CREATED).json(usuarioCriado);
             }
@@ -62,6 +62,7 @@ export class UsuarioController {
             }
         }
         catch (exception) {
+            console.log(exception)
             res.status(HttpStatus.CONFLICT).json(exception);
         }
 
@@ -72,7 +73,16 @@ export class UsuarioController {
     public atualizarUsuario(@Param('id') id: number, @Body() request: AtualizarUsuarioRequest, @Res() res: Response) {
         var sucesso = this.usuarioServico.atualizarUsuario(id, request);
 
-        var status = sucesso == true ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+        var status = sucesso ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
+
+        res.status(status).send();
+    }
+    
+    @Delete('removerUsuario/:id')
+    public removerUsuario(@Param('id') id: number, @Res() res: Response){
+        var sucesso = this.usuarioServico.removerUsuario(id);
+
+        var status = sucesso ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
         res.status(status).send();
     }

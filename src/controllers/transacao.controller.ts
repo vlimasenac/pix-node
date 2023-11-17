@@ -5,7 +5,7 @@ import { TransacaoServico } from "src/servicos/transacao.servico";
 @Controller({
     path: "transacao"
 })
-export class trasacaoController {
+export class TransacaoController {
 
     constructor(private transacaoServico: TransacaoServico){
 

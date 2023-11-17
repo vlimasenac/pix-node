@@ -1,20 +1,20 @@
 import { Usuario } from "src/entidades/usuario.entidade";
+import { UsuarioRepositorio } from "src/repositorios/usuario.repositorio";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.requet";
 
 export class UsuarioServico {
 
-    private usuariosEmMemoria: Usuario[] = [];
+    constructor(private usuarioRepositorio: UsuarioRepositorio){
+
+    }
 
     getUsuarios(): Usuario[] {
-        return this.usuariosEmMemoria;
+        return this.usuarioRepositorio.getUsuarios();
     }
 
     getUsuarioPorId(id: number): Usuario | undefined {
-
-        var usuario = this.getUsuarios().find(user => user.id == id);
-
-        return usuario;
+        return this.usuarioRepositorio.getUsuarioPorId(id);
     }
 
     getUsuarioPorNome(nome: string): Usuario | undefined {
@@ -41,10 +41,15 @@ export class UsuarioServico {
             nome: request.nome,
             senha: request.senha
         });
+        console.log(usuario);
 
-        this.getUsuarios().push(usuario);
+        this.usuarioRepositorio.salvarUsuario(usuario);
 
         return usuario;
+    }
+
+    public removerUsuario(id: number): boolean {
+        return this.usuarioRepositorio.removerUsuario(id);
     }
 
     public atualizarUsuario(id: number, request: AtualizarUsuarioRequest): boolean {
@@ -54,7 +59,7 @@ export class UsuarioServico {
 
         usuario.atualizar(request.nome, request.chavePix);
 
-        this.salvarUsuario(usuario);
+        this.usuarioRepositorio.salvarUsuario(usuario);
 
         return true;
     }
@@ -73,11 +78,5 @@ export class UsuarioServico {
         var emailBuscaNormalizado = email.toLowerCase();
 
         return userEmailNormalizado == emailBuscaNormalizado;
-    }
-
-    private salvarUsuario(user: Usuario){
-        var usuarioIndex = this.usuariosEmMemoria.indexOf(user);
-
-        this.usuariosEmMemoria[usuarioIndex] = user;
     }
 }
