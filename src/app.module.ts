@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsuarioController } from './controllers/usuario.controller';
 import { UsuarioServico } from './servicos/usuario.servico';
@@ -12,6 +11,8 @@ import { ContaRepositorio } from './repositorios/conta.repositorio';
 import { TransacaoRepositorio } from './repositorios/transacao.repositorio';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Usuario } from './entidades/usuario.entidade';
+import { Conta } from './entidades/conta.entidade';
+import { Transacao } from './entidades/transacao.entidade';
 
 @Module({
   imports: [
@@ -22,13 +23,20 @@ import { Usuario } from './entidades/usuario.entidade';
       username: 'root',
       password: '',
       database: 'pix-node',
-      entities: [Usuario],
+      entities: [
+        Usuario,
+        Conta,
+        Transacao
+      ],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([Usuario])
+    TypeOrmModule.forFeature([
+      Usuario,
+      Conta,
+      Transacao
+    ])
   ],
   controllers: [
-    AppController, 
     UsuarioController, 
     TransacaoController,
     ContaController

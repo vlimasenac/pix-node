@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Usuario } from "src/entidades/usuario.entidade";
 import { UsuarioRepositorio } from "src/repositorios/usuario.repositorio";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
-import { CriarUsuarioRequest } from "src/requests/criar-usuario.requet";
+import { CriarUsuarioRequest } from "src/requests/criar-usuario.request";
 
 @Injectable()
 export class UsuarioServico {
@@ -23,8 +23,8 @@ export class UsuarioServico {
         return this.usuarioRepositorio.getUsuarioPorEmail(email);
     }
 
-    public incluirUsuario(request: CriarUsuarioRequest): Promise<Usuario> {
-        var usuarioEncontradoComEmail = this.getUsuarioPorEmail(request.email);
+    public async incluirUsuario(request: CriarUsuarioRequest): Promise<Usuario> {
+        var usuarioEncontradoComEmail = await this.getUsuarioPorEmail(request.email);
 
         if(usuarioEncontradoComEmail != undefined){
             throw "Usuario já registrado com esse email.";

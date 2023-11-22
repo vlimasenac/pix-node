@@ -12,19 +12,19 @@ export class ContaServico {
 
     }
 
-    public getContas(): Conta[] {
+    public getContas(): Promise<Conta[]> {
         return this.contaRepositorio.getContas();
     }
 
-    public abrirConta(request: CriarContaRequest): Conta {
+    public async abrirConta(request: CriarContaRequest): Promise<Conta> {
 
-        var usuarioEncontrado = this.usuarioRepositorio.getUsuarioPorId(request.idUsuario);
+        var usuarioEncontrado = await this.usuarioRepositorio.getUsuarioPorId(request.idUsuario);
 
         if(usuarioEncontrado == undefined){
             throw "Não existe um usuario com id " + request.idUsuario;
         }
 
-        var contaEncontrada = this.getContaUsuario(request.idUsuario);
+        var contaEncontrada = await this.getContaUsuario(request.idUsuario);
 
         if(contaEncontrada != undefined){
             throw "Conta já existente para o usuario com id " + request.idUsuario;
@@ -33,12 +33,10 @@ export class ContaServico {
         var novaConta = new Conta(request.idUsuario, request.chavePix);
         novaConta.depositar(request.saldoInicial);
 
-        this.contaRepositorio.salvarConta(novaConta);
-
-        return novaConta;
+        return this.contaRepositorio.salvarConta(novaConta);
     }
 
-    public getContaUsuario(idUsuario: number): Conta | undefined {
-        return this.getContas().find(x => x.idUsuario == idUsuario);
+    public getContaUsuario(idUsuario: number): Promise<Conta | undefined> {
+        return this.contaRepositorio.getContaPorUsuario(idUsuario);
     }
 }

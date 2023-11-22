@@ -14,46 +14,69 @@ export class TransacaoServico {
 
     }
 
-    getTransacoes(): Transacao[] {
+    public getTransacoes(): Promise<Transacao[]> {
         return this.transacaoRepositorio.getTransacoes();
     }
 
     public async realizarTransferencia(request: RealizarTransferenciaRequest): Promise<Transacao> {
-        var contaDestino = this.contaRepositorio.getContaPorChavePix(request.chavePixDestino);
+
+        var tempTransacao = new Transacao({
+            valor: request.valor,
+            idUsuarioOrigem: request.idUsuarioOrigem,
+            chavePixDestino: request.chavePixDestino
+        });
+
+        var transacao = await this.transacaoRepositorio.salvarTransacao(tempTransacao);
+
+        var contaDestino = await this.contaRepositorio.getContaPorChavePix(request.chavePixDestino);
+
+        var mensagemErro = '';
 
         if(contaDestino == undefined){
-            throw "Nenhuma conta encontrada com a chave pix informada.";
+            mensagemErro += " Nenhuma conta encontrada com a chave pix informada.";
         }
 
         var usuarioOrigem = await this.usuarioRepositorio.getUsuarioPorId(request.idUsuarioOrigem);
 
         if(usuarioOrigem == undefined){
-            throw "Nenhum usuario encontrado com o id informado.";
+            mensagemErro += " Nenhum usuario encontrado com o id informado.";
         }
 
-        var contaOrigem = this.contaRepositorio.getContaPorUsuario(request.idUsuarioOrigem);
+        var contaOrigem = await this.contaRepositorio.getContaPorUsuario(request.idUsuarioOrigem);
 
         if(contaOrigem == undefined){
-            throw "Nenhuma conta encontrada com o id de usuario informado.";
+            mensagemErro += " Nenhuma conta encontrada com o id de usuario informado.";
         }
 
-        if(contaDestino.idUsuario == contaOrigem.idUsuario){
-            throw "Conta de destino nao pode ser igual a conta de origem."
+        if(contaDestino?.idUsuario == contaOrigem?.idUsuario){
+            mensagemErro += " Conta de destino nao pode ser igual a conta de origem."
         }
+        
+        if(mensagemErro == ''){
+            try{
+                contaOrigem.sacar(request.valor);
+                contaDestino.depositar(request.valor);
 
-        var transacao = new Transacao({
-            valor: request.valor,
-            idUsuarioOrigem: usuarioOrigem.id,
-            chavePixDestino: request.chavePixDestino
-        });
+                transacao.concluir();
 
-        contaOrigem.sacar(request.valor);
-        contaDestino.depositar(request.valor);
+                await this.transacaoRepositorio.salvarTransacao(transacao);
+            }
+            catch(erro){
+                transacao.falhar(erro);
 
-        transacao.concluir();
+                await this.transacaoRepositorio.salvarTransacao(transacao);
 
-        this.transacaoRepositorio.salvarTransacao(transacao);
+                throw erro;
+            }
+        }
+        else {
+            transacao.falhar(mensagemErro);
 
-        return transacao;
+            await this.transacaoRepositorio.salvarTransacao(transacao);
+
+            throw mensagemErro;
+        }
+        
+        return transacao
     }
 }

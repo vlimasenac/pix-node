@@ -1,9 +1,16 @@
+import { Column, Entity } from "typeorm";
 import { BaseEntidade } from "./base.entidade";
 
+@Entity()
 export class Conta extends BaseEntidade {
 
+    @Column()
     public idUsuario: number;
+
+    @Column()
     public saldo: number;
+
+    @Column()
     public chavePix: string;
 
     constructor(idUsuario: number, chavePix: string){

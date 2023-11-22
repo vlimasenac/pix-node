@@ -1,24 +1,21 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Transacao } from "src/entidades/transacao.entidade";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class TransacaoRepositorio {
 
-    private transacoesEmMemoria: Transacao[] = [];
+    constructor(@InjectRepository(Transacao) private transacaoRepository: Repository<Transacao>){
 
-    public getTransacoes(): Transacao[] {
-        return this.transacoesEmMemoria;
     }
 
-    public salvarTransacao(transacao: Transacao){
+    public getTransacoes(): Promise<Transacao[]> {
+        return this.transacaoRepository.find();
+    }
 
-        var indexTransacaoExistente = this.transacoesEmMemoria.indexOf(transacao);
+    public salvarTransacao(transacao: Transacao): Promise<Transacao>{
 
-        if(indexTransacaoExistente >= 0){
-            this.transacoesEmMemoria[indexTransacaoExistente] = transacao;
-        }
-        else{
-            this.transacoesEmMemoria.push(transacao);
-        }
+        return this.transacaoRepository.save(transacao);
     }
 }

@@ -3,10 +3,12 @@ import { Transacao } from "src/entidades/transacao.entidade";
 import { RealizarTransferenciaRequest } from "src/requests/realizar-transferencia.request";
 import { TransacaoServico } from "src/servicos/transacao.servico"; 
 import { Response } from "express";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller({
     path: "transacao"
 })
+@ApiTags("Transacoes")
 export class TransacaoController {
 
     constructor(private transacaoServico: TransacaoServico){
@@ -14,9 +16,9 @@ export class TransacaoController {
     }
 
     @Get("listarTransacoes")
-    public listarTransacoes(): Transacao[] {
+    public async listarTransacoes() {
 
-        return this.transacaoServico.getTransacoes();
+        return await this.transacaoServico.getTransacoes();
     }
 
     @Post('realizarTransferencia')

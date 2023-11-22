@@ -2,11 +2,12 @@ import { Body, Controller, Get, HttpStatus, Post, Res } from "@nestjs/common";
 import { CriarContaRequest } from "src/requests/criar-conta.request";
 import { ContaServico } from "src/servicos/conta.servico";
 import { Response } from 'express';
-import { Conta } from "src/entidades/conta.entidade";
+import { ApiTags } from "@nestjs/swagger";
 
 @Controller({
     path: 'contas'
 })
+@ApiTags("Contas")
 export class ContaController {
 
     constructor(private contaServico: ContaServico){
@@ -14,16 +15,16 @@ export class ContaController {
     }
 
     @Get('listarContas')
-    public listarContas(): Conta[] {
-        var contas = this.contaServico.getContas();
+    public async listarContas() {
+        var contas = await this.contaServico.getContas();
 
         return contas;
     }
 
     @Post('adicionarConta')
-    public adicionarConta(@Body() request: CriarContaRequest, @Res() res: Response) {
+    public async adicionarConta(@Body() request: CriarContaRequest, @Res() res: Response) {
         try{
-            var novaConta = this.contaServico.abrirConta(request);
+            var novaConta = await this.contaServico.abrirConta(request);
 
             res.status(HttpStatus.CREATED).json(novaConta).send();
         }

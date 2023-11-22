@@ -1,13 +1,15 @@
 import { Controller, Get, HttpStatus, Param, Query, Res, Body, Post, Put, Delete } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { Response } from "express";
 import { Usuario } from "src/entidades/usuario.entidade";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
-import { CriarUsuarioRequest } from "src/requests/criar-usuario.requet";
+import { CriarUsuarioRequest } from "src/requests/criar-usuario.request";
 import { UsuarioServico } from "src/servicos/usuario.servico";
 
 @Controller({
     path: "usuarios"
 })
+@ApiTags("Usuarios")
 export class UsuarioController {
 
     constructor(private usuarioServico: UsuarioServico){
@@ -29,7 +31,7 @@ export class UsuarioController {
             res.status(HttpStatus.OK).json(usuarioEncontrado);
         }
         else{
-            res.status(HttpStatus.BAD_REQUEST);
+            res.status(HttpStatus.BAD_REQUEST).json("Usuario nao encontrado com o id informado.");
         }
 
         res.send();

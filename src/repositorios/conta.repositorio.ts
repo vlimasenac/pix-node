@@ -1,37 +1,30 @@
 import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 import { Conta } from "src/entidades/conta.entidade";
+import { Repository } from "typeorm";
 
 @Injectable()
 export class ContaRepositorio {
     
-    private contasEmMemoria: Conta[] = [];
+    constructor(@InjectRepository(Conta) private contaRepository: Repository<Conta>){
 
-    public getContas(): Conta[] {
-        return this.contasEmMemoria;
     }
 
-    public getContaPorChavePix(chavePix: string): Conta | undefined {
-
-        var conta = this.getContas().find(x => x.chavePix == chavePix);
-
-        return conta;
+    public getContas(): Promise<Conta[]> {
+        return this.contaRepository.find();
     }
 
-    public getContaPorUsuario(idUsuario: number): Conta | undefined {
+    public getContaPorChavePix(chavePix: string): Promise<Conta | undefined> {
 
-        var conta = this.getContas().find(x => x.idUsuario == idUsuario);
-
-        return conta;
+        return this.contaRepository.findOneBy({ chavePix })
     }
 
-    public salvarConta(conta: Conta) {
-        var indexContaExistente = this.contasEmMemoria.indexOf(conta);
+    public getContaPorUsuario(idUsuario: number): Promise<Conta | undefined> {
 
-        if(indexContaExistente >= 0){
-            this.contasEmMemoria[indexContaExistente] = conta;
-        }
-        else{
-            this.contasEmMemoria.push(conta);
-        }
+        return this.contaRepository.findOneBy({ idUsuario })
+    }
+
+    public salvarConta(conta: Conta): Promise<Conta> {
+        return this.contaRepository.save(conta);
     }
 }
