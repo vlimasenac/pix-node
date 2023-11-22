@@ -1,17 +1,27 @@
-export class Conta {
+import { BaseEntidade } from "./base.entidade";
+
+export class Conta extends BaseEntidade {
 
     public idUsuario: number;
     public saldo: number;
+    public chavePix: string;
 
-    constructor(idUsuario: number){
+    constructor(idUsuario: number, chavePix: string){
+        super();
         this.idUsuario = idUsuario;
+        this.chavePix = chavePix;
+        this.saldo = 0;
     }
 
-    public adicionarSaldo(valor: number){
+    public depositar(valor: number){
         this.saldo += valor;
     }
 
-    public removeSaldo(valor: number){
+    public sacar(valor: number){
+        if(valor > this.saldo){
+            throw "Saldo insuficiente."
+        }
+
         this.saldo -= valor;
     }
 }

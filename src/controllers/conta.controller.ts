@@ -1,7 +1,8 @@
-import { Body, Controller, HttpStatus, Post, Res } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Res } from "@nestjs/common";
 import { CriarContaRequest } from "src/requests/criar-conta.request";
 import { ContaServico } from "src/servicos/conta.servico";
 import { Response } from 'express';
+import { Conta } from "src/entidades/conta.entidade";
 
 @Controller({
     path: 'contas'
@@ -10,6 +11,13 @@ export class ContaController {
 
     constructor(private contaServico: ContaServico){
 
+    }
+
+    @Get('listarContas')
+    public listarContas(): Conta[] {
+        var contas = this.contaServico.getContas();
+
+        return contas;
     }
 
     @Post('adicionarConta')

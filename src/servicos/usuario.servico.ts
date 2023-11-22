@@ -11,26 +11,19 @@ export class UsuarioServico {
 
     }
 
-    getUsuarios(): Usuario[] {
+    public getUsuarios(): Promise<Usuario[]> {
         return this.usuarioRepositorio.getUsuarios();
     }
 
-    getUsuarioPorId(id: number): Usuario | undefined {
+    public getUsuarioPorId(id: number): Promise<Usuario | undefined> {
         return this.usuarioRepositorio.getUsuarioPorId(id);
     }
 
-    getUsuarioPorNome(nome: string): Usuario | undefined {
-
-        var usuario = this.getUsuarios().find(user => this.checarNomeUsuarioContemTexto(user, nome));
-
-        return usuario;
+    public getUsuarioPorEmail(email: string): Promise<Usuario | undefined> {
+        return this.usuarioRepositorio.getUsuarioPorEmail(email);
     }
 
-    getUsuarioPorEmail(email: string): Usuario | undefined {
-        return this.getUsuarios().find(user => this.checarEmailUsuarioEIgual(user, email));
-    }
-
-    public incluirUsuario(request: CriarUsuarioRequest): Usuario {
+    public incluirUsuario(request: CriarUsuarioRequest): Promise<Usuario> {
         var usuarioEncontradoComEmail = this.getUsuarioPorEmail(request.email);
 
         if(usuarioEncontradoComEmail != undefined){
@@ -38,46 +31,27 @@ export class UsuarioServico {
         }
         
         var usuario = new Usuario({
-            chavePix: request.chavePix,
             email: request.email,
             nome: request.nome,
             senha: request.senha
         });
 
-        this.usuarioRepositorio.salvarUsuario(usuario);
-
-        return usuario;
+        return this.usuarioRepositorio.salvarUsuario(usuario);
     }
 
-    public removerUsuario(id: number): boolean {
+    public removerUsuario(id: number): Promise<boolean> {
         return this.usuarioRepositorio.removerUsuario(id);
     }
 
-    public atualizarUsuario(id: number, request: AtualizarUsuarioRequest): boolean {
-        var usuario = this.getUsuarioPorId(id);
+    public async atualizarUsuario(id: number, request: AtualizarUsuarioRequest): Promise<boolean> {
+        var usuario = await this.getUsuarioPorId(id);
 
         if(usuario == undefined) return false;
 
-        usuario.atualizar(request.nome, request.chavePix);
+        usuario.atualizar(request.nome);
 
-        this.usuarioRepositorio.salvarUsuario(usuario);
+        await this.usuarioRepositorio.salvarUsuario(usuario);
 
         return true;
-    }
-
-    private checarNomeUsuarioContemTexto(user: Usuario, nome: string): boolean {
-        var userNomeNormalizado = user.nome.toLowerCase();
-        var nomeBuscaNormalizado = nome.toLowerCase();
-
-        var contemTextoNoNome = userNomeNormalizado.includes(nomeBuscaNormalizado);
-
-        return contemTextoNoNome;
-    }
-
-    private checarEmailUsuarioEIgual(user: Usuario, email: string): boolean {
-        var userEmailNormalizado = user.email.toLowerCase();
-        var emailBuscaNormalizado = email.toLowerCase();
-
-        return userEmailNormalizado == emailBuscaNormalizado;
     }
 }

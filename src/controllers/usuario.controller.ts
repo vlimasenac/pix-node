@@ -15,29 +15,15 @@ export class UsuarioController {
     }
 
     @Get("listarUsuarios")
-    public listarUsuarios(): Usuario[] {
+    public async listarUsuarios() {
 
-        return this.usuarioServico.getUsuarios();
-    }
-
-    @Get('getPorNome')
-    public getPorNome(@Query('nome') nome, @Res() res: Response){       
-        var usuarioEncontrado = this.usuarioServico.getUsuarioPorNome(nome);
-
-        if(usuarioEncontrado != undefined){
-            res.status(HttpStatus.OK).json(usuarioEncontrado);
-        }
-        else{
-            res.status(HttpStatus.BAD_REQUEST);
-        }
-
-        res.send();
+        return await this.usuarioServico.getUsuarios();
     }
 
     @Get(':id')
-    public getUsuarioPorId(@Param('id') id: number, @Res() res: Response) {
+    public async getUsuarioPorId(@Param('id') id: number, @Res() res: Response) {
 
-        var usuarioEncontrado = this.usuarioServico.getUsuarioPorId(id);
+        var usuarioEncontrado = await this.usuarioServico.getUsuarioPorId(id);
 
         if(usuarioEncontrado != undefined){
             res.status(HttpStatus.OK).json(usuarioEncontrado);
@@ -50,11 +36,11 @@ export class UsuarioController {
     }
 
     @Post('incluirUsuario')
-    public incluirUsuario(@Body() user: CriarUsuarioRequest, @Res() res: Response) {
+    public async incluirUsuario(@Body() user: CriarUsuarioRequest, @Res() res: Response) {
         try{
-            var usuarioCriado = this.usuarioServico.incluirUsuario(user);
+            var usuarioCriado = await this.usuarioServico.incluirUsuario(user);
 
-            if(usuarioCriado != undefined){
+            if(usuarioCriado.id > 0){
                 res.status(HttpStatus.CREATED).json(usuarioCriado);
             }
             else{
@@ -70,8 +56,8 @@ export class UsuarioController {
     }
 
     @Put('atualizarUsuario/:id')
-    public atualizarUsuario(@Param('id') id: number, @Body() request: AtualizarUsuarioRequest, @Res() res: Response) {
-        var sucesso = this.usuarioServico.atualizarUsuario(id, request);
+    public async atualizarUsuario(@Param('id') id: number, @Body() request: AtualizarUsuarioRequest, @Res() res: Response) {
+        var sucesso = await this.usuarioServico.atualizarUsuario(id, request);
 
         var status = sucesso ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 
@@ -79,8 +65,8 @@ export class UsuarioController {
     }
     
     @Delete('removerUsuario/:id')
-    public removerUsuario(@Param('id') id: number, @Res() res: Response){
-        var sucesso = this.usuarioServico.removerUsuario(id);
+    public async removerUsuario(@Param('id') id: number, @Res() res: Response){
+        var sucesso = await this.usuarioServico.removerUsuario(id);
 
         var status = sucesso ? HttpStatus.OK : HttpStatus.BAD_REQUEST;
 

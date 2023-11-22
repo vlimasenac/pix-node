@@ -30,8 +30,8 @@ export class ContaServico {
             throw "Conta já existente para o usuario com id " + request.idUsuario;
         }
 
-        var novaConta = new Conta(request.idUsuario);
-        novaConta.adicionarSaldo(request.saldoInicial);
+        var novaConta = new Conta(request.idUsuario, request.chavePix);
+        novaConta.depositar(request.saldoInicial);
 
         this.contaRepositorio.salvarConta(novaConta);
 

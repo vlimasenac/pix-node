@@ -1,18 +1,25 @@
-export class Transacao {
+import { BaseEntidade } from "./base.entidade";
+
+export class Transacao extends BaseEntidade {
 
     public data: Date;
     public valor: number;
     public idUsuarioOrigem: number;
-    public idUsuarioDestino: number;
     public chavePixDestino: string;
     public sucesso: boolean;
 
-    constructor(data: Date, valor: number, idUsuarioOrigem: number, idUsuarioDestino: number, chavePixDestino: string, sucesso: boolean){
-        this.data = data;
-        this.valor = valor;
-        this.idUsuarioOrigem = idUsuarioOrigem ;
-        this.idUsuarioDestino = idUsuarioDestino; 
-        this.chavePixDestino = chavePixDestino; 
-        this.sucesso = sucesso;
+    constructor(transacao: Partial<Transacao>){
+        super();
+        
+        this.data = transacao.data || new Date();
+        this.valor = transacao.valor || 0;
+        this.idUsuarioOrigem = transacao.idUsuarioOrigem;
+        this.chavePixDestino = transacao.chavePixDestino; 
+        this.sucesso = transacao.sucesso || false;
+    }
+
+    public concluir(){
+        this.data = new Date();
+        this.sucesso = true;
     }
 }

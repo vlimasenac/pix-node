@@ -1,20 +1,27 @@
-export class Usuario {
+import { Column, Entity } from "typeorm";
+import { BaseEntidade } from "./base.entidade";
 
-    public id: number;
+@Entity()
+export class Usuario extends BaseEntidade {
+
+    @Column()
     public nome: string;
-    public email: string;
-    public senha: string;
-    public chavePix: string;
 
+    @Column()
+    public email: string;
+
+    @Column()
+    public senha: string;
+    
     constructor(user: Partial<Usuario>){
+        super();
+
         this.nome = user?.nome ?? '';
         this.email = user?.email ?? '';
         this.senha = user?.senha ?? '';
-        this.id = user?.id ?? 0;
     }
 
-    atualizar(nome: string, chavePix: string){
+    atualizar(nome: string){
         this.nome = nome;
-        this.chavePix = chavePix;
     }
 }

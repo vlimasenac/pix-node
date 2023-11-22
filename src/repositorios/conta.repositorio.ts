@@ -10,6 +10,20 @@ export class ContaRepositorio {
         return this.contasEmMemoria;
     }
 
+    public getContaPorChavePix(chavePix: string): Conta | undefined {
+
+        var conta = this.getContas().find(x => x.chavePix == chavePix);
+
+        return conta;
+    }
+
+    public getContaPorUsuario(idUsuario: number): Conta | undefined {
+
+        var conta = this.getContas().find(x => x.idUsuario == idUsuario);
+
+        return conta;
+    }
+
     public salvarConta(conta: Conta) {
         var indexContaExistente = this.contasEmMemoria.indexOf(conta);
 
