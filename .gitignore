@@ -1,6 +1,15 @@
 # compiled output
 /dist
+/backend/dist
+/frontend/dist
+
+/frontend/.angular
+
+/backend/node_modules
+/frontend/node_modules
+
 /node_modules
+/.angular
 
 # Logs
 logs
@@ -28,8 +37,14 @@ lerna-debug.log*
 *.sublime-workspace
 
 # IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+/backend/.vscode/*
+/backend/!.vscode/settings.json
+/backend/!.vscode/tasks.json
+/backend/!.vscode/launch.json
+/backend/!.vscode/extensions.json
+
+/frontend/.vscode/*
+/frontend/!.vscode/settings.json
+/frontend/!.vscode/tasks.json
+/frontend/!.vscode/launch.json
+/frontend/!.vscode/extensions.json
