@@ -3,6 +3,7 @@ import { Usuario } from "src/entidades/usuario.entidade";
 import { UsuarioRepositorio } from "src/repositorios/usuario.repositorio";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.request";
+import { LoginRequest } from "src/requests/login.request";
 
 @Injectable()
 export class UsuarioServico {
@@ -53,5 +54,15 @@ export class UsuarioServico {
         await this.usuarioRepositorio.salvarUsuario(usuario);
 
         return true;
+    }
+
+    public async login(request: LoginRequest): Promise<Usuario> {
+        var usuario = await this.usuarioRepositorio.getUsuarioPorEmail(request.email);
+
+        if(usuario == undefined || usuario.senha != request.senha){
+            throw "Login inválido.";
+        }
+
+        return usuario;
     }
 }

@@ -1,3 +1,5 @@
+<app-barra-navegacao></app-barra-navegacao>
+
 <h2 id="titulo-lista-usuarios">Lista de Usuarios</h2>
 
 <div id="tabela-usuarios-container">
@@ -10,7 +12,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let usuario of usuarios">
+        <tr [routerLink]="['/usuarios', usuario.id]" *ngFor="let usuario of usuarios">
             <th>{{ usuario.id }}</th>
             <td>{{ usuario.nome }}</td>
             <td>{{ usuario.email }}</td>

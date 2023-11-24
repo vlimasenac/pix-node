@@ -1,0 +1,19 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AppComponent } from '../../app.component';
+
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.scss'
+})
+export class LoginComponent {
+
+  public login(){
+    var usuario = undefined;
+
+    AppComponent.usuarioLogado = usuario;
+  }
+}

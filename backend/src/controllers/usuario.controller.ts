@@ -4,6 +4,7 @@ import { Response } from "express";
 import { Usuario } from "src/entidades/usuario.entidade";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.request";
+import { LoginRequest } from "src/requests/login.request";
 import { UsuarioServico } from "src/servicos/usuario.servico";
 
 @Controller({
@@ -35,6 +36,18 @@ export class UsuarioController {
         }
 
         res.send();
+    }
+
+    @Post('login')
+    public async login(@Body() request: LoginRequest, @Res() res: Response){
+        try{
+            var usuario = await this.usuarioServico.login(request);
+
+            res.status(HttpStatus.OK).json(usuario).send();
+        }
+        catch(error){
+            res.status(HttpStatus.UNAUTHORIZED).json(error).send();
+        }
     }
 
     @Post('incluirUsuario')
