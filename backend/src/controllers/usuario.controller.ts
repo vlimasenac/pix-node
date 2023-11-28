@@ -1,6 +1,6 @@
 import { Controller, Get, HttpStatus, Param, Query, Res, Body, Post, Put, Delete } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
-import { Response } from "express";
+import { Response } from "express";;
 import { Usuario } from "src/entidades/usuario.entidade";
 import { AtualizarUsuarioRequest } from "src/requests/atualizar-usuario.request";
 import { CriarUsuarioRequest } from "src/requests/criar-usuario.request";
