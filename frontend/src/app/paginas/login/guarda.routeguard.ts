@@ -10,7 +10,6 @@ export class GuardaRota {
     }
 
     canActivate(): boolean {
-        
         var podeAcessar = AppComponent.usuarioLogado != undefined;
 
         if(!podeAcessar){

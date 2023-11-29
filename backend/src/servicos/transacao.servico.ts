@@ -57,6 +57,9 @@ export class TransacaoServico {
                 contaOrigem.sacar(request.valor);
                 contaDestino.depositar(request.valor);
 
+                await this.contaRepositorio.salvarConta(contaOrigem);
+                await this.contaRepositorio.salvarConta(contaDestino);
+
                 transacao.concluir();
 
                 await this.transacaoRepositorio.salvarTransacao(transacao);

@@ -11,5 +11,5 @@ import { Usuario } from './models/usuario.model';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  public static usuarioLogado: Usuario | undefined = undefined;
+  public static usuarioLogado: Usuario;
 }

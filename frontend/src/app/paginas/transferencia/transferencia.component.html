@@ -1,0 +1,20 @@
+<app-barra-navegacao></app-barra-navegacao>
+
+<div class="px-4 py-3">
+
+    <div class="form-group">
+      <label >Chave pix</label>
+      <input type="text" [(ngModel)]="chavePix" (focusout)="consultarChavePix()" class="form-control">
+      <label *ngIf="destinatario != ''" >Destinatário: {{ destinatario }}</label>
+    </div>
+
+    <div class="form-group">
+      <label>Valor</label>
+      <input type="number" [(ngModel)]="valor" class="form-control" placeholder="R$ 0,00">
+    </div>
+
+    <div class="text-right">
+      <button type="button" class="btn btn-primary" [disabled]="enviarDesativado()" (click)="realizarTransferencia()">Enviar</button>
+    </div>
+
+  </div>
